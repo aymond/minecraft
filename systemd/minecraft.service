@@ -1,0 +1,31 @@
+[Unit]
+Description=Minecraft Server
+Documentation=
+
+Wants=network.target
+After=network.target
+
+[Service]
+User=minecraft
+Group=minecraft
+Nice=5
+SuccessExitStatus=143
+
+ProtectHome=true
+ProtectSystem=full
+PrivateDevices=true
+NoNewPrivileges=true
+PrivateTmp=true
+InaccessibleDirectories=/root /sys /srv -/opt /media -/lost+found
+ReadWriteDirectories=/mnt/minecraft/server
+WorkingDirectory=/mnt/minecraft/server
+#No Forking with mark2, so need a oneshot service. This is not best practice for long-running services.
+Type=oneshot
+#Specifies whether the service shall be considered active even when all its processes exited
+RemainAfterExit=yes
+#ExecStart= Commands with their arguments that are executed when this service is started.
+ExecStart=/usr/bin/mark2 start /mnt/minecraft/server
+ExecStop=/usr/bin/mark2 stop /mnt/minecraft/server
+
+[Install]
+WantedBy=multi-user.target
